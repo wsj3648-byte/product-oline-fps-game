@@ -98,7 +98,7 @@ function main() {
     // Player setup
     const playerHeight = 1.8; // Approximate height of a person
     const playerRadius = 0.3;
-    const playerGeometry = new THREE.CapsuleGeometry(playerRadius, playerHeight - playerRadius * 2, 4);
+    const playerGeometry = new THREE.BoxGeometry(playerRadius * 2, playerHeight, playerRadius * 2);
     const playerMaterial = new THREE.MeshStandardMaterial({ color: 0x0000ff });
     const player = new THREE.Mesh(playerGeometry, playerMaterial);
     player.position.y = playerHeight / 2; // Start on the ground
@@ -106,7 +106,7 @@ function main() {
 
     // Attach camera to player
     player.add(camera);
-    camera.position.set(0, playerHeight / 2 - playerRadius, 0); // Position camera at eye level within the capsule
+
 
     // Movement variables
     const moveSpeed = 0.1;
@@ -233,7 +233,7 @@ function main() {
     const remoteBullets = {}; // Map to store remote bullets { shooterId: [{mesh, direction}] }
 
     function createPlayerMesh(color = 0xff0000) { // Default color for other players
-        const playerGeo = new THREE.CapsuleGeometry(playerRadius, playerHeight - playerRadius * 2, 4);
+        const playerGeo = new THREE.BoxGeometry(playerRadius * 2, playerHeight, playerRadius * 2);
         const playerMat = new THREE.MeshStandardMaterial({ color: color });
         const playerMesh = new THREE.Mesh(playerGeo, playerMat);
         return playerMesh;
