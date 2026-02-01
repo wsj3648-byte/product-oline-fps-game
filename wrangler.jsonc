@@ -1,5 +1,6 @@
 {
   "name": "product-oline-fps-game",
+  "main": "server.js",
   "compatibility_date": "2026-01-29",
   "assets": {
     "directory": "."
