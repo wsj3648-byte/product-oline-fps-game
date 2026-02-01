@@ -1,7 +1,7 @@
 // Initialize Socket.IO connection (assuming server is running and accessible)
 // Note: If the server is not running on the same host/port as the client, you'll need to specify it.
 // For now, assume it's accessible.
-const socket = io();
+const socket = io('https://product-oline-fps-game.wsj3648-daa.workers.dev');
 
 // --- Three.js Setup (existing) ---
 function main() {
