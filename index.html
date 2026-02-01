@@ -3,68 +3,11 @@
 	<head>
 		<meta charset="utf-8">
 		<title>My first oline game</title>
-		<style>
-			body { margin: 0; overflow: hidden; } /* Add overflow: hidden to prevent scrollbars */
-			canvas { display: block; }
-			#healthDisplay {
-				position: absolute;
-				bottom: 20px;
-				left: 20px;
-				color: white;
-				font-size: 24px;
-				font-family: Arial, sans-serif;
-				background-color: rgba(0, 0, 0, 0.5);
-				padding: 10px;
-				border-radius: 5px;
-			}
-			#scoreboard {
-				position: absolute;
-				top: 50%;
-				left: 50%;
-				transform: translate(-50%, -50%);
-				color: white;
-				font-size: 20px;
-				font-family: Arial, sans-serif;
-				background-color: rgba(0, 0, 0, 0.7);
-				padding: 20px;
-				border-radius: 10px;
-				display: none; /* Hidden by default */
-				z-index: 100;
-			}
-			#scoreboard table {
-				width: 100%;
-				border-collapse: collapse;
-			}
-			#scoreboard th, #scoreboard td {
-				padding: 8px;
-				text-align: left;
-				border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-			}
-			#scoreboard th {
-				color: #aaa;
-			}
-		</style>
+		<link rel="stylesheet" href="style.css">
 	</head>
 	<body>
-		<div id="crosshair"></div>
-		<div id="healthDisplay">Health: 100</div>
-		<div id="scoreboard">
-			<h2>Scoreboard</h2>
-			<table id="scoreboardTable">
-				<thead>
-					<tr>
-						<th>Player ID</th>
-						<th>Kills</th>
-						<th>Deaths</th>
-					</tr>
-				</thead>
-				<tbody>
-					<!-- Player scores will be inserted here by JavaScript -->
-				</tbody>
-			</table>
-		</div>
-		<script src="https://unpkg.com/three@0.128.0/build/three.min.js"></script>
-		<script src="/socket.io/socket.io.js"></script>
-		<script src="game.js"></script>
-	</body>
+	<canvas id="c"></canvas>
+	<script src="/socket.io/socket.io.js"></script>
+	<script type="module" src="game.js"></script>
+</body>
 </html>
