@@ -8,6 +8,7 @@ function main() {
     const canvas = document.querySelector('#c');
     const renderer = new THREE.WebGLRenderer({ antialias: true, canvas });
     renderer.shadowMap.enabled = true;
+    renderer.setPixelRatio(window.devicePixelRatio);
 
     const fov = 75;
     const aspect = window.innerWidth / window.innerHeight;
@@ -24,11 +25,13 @@ function main() {
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
         scene.add(ambientLight);
 
+        scene.add(new THREE.HemisphereLight(0xffffff, 0x000000, 0.2));
+
         const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
         directionalLight.position.set(20, 30, 15);
         directionalLight.castShadow = true;
-        directionalLight.shadow.mapSize.width = 2048;
-        directionalLight.shadow.mapSize.height = 2048;
+        directionalLight.shadow.mapSize.width = 4096;
+        directionalLight.shadow.mapSize.height = 4096;
         scene.add(directionalLight);
         scene.add(directionalLight.target);
     }
