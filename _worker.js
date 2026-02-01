@@ -1,7 +1,9 @@
+import { getAssetFromKV, mapRequestToAsset } from '@cloudflare/kv-asset-handler';
+
 // server.js - Cloudflare Worker implementation
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) { // Add ctx argument
     const url = new URL(request.url);
 
     // Handle WebSocket upgrade requests
@@ -12,10 +14,32 @@ export default {
       return stub.fetch(request);
     }
 
-    // Serve static files (simplified - this is usually handled by Pages/etc.)
-    // For now, if not a websocket request, return a simple response.
-    // In a real scenario, this worker might proxy to Pages or serve assets itself.
-    return new Response("Not Found", { status: 404 });
+    // Serve static files
+    try {
+      if (env.__STATIC_CONTENT) { // Check if STATIC_CONTENT binding exists
+        return await getAssetFromKV(
+          {
+            request,
+            waitUntil: ctx.waitUntil,
+          },
+          {
+            ASSET_NAMESPACE: env.__STATIC_CONTENT,
+            ASSET_MANIFEST: {}, // In local development, ASSET_MANIFEST is optional
+                                 // For Pages, this is typically generated.
+                                 // Leaving empty for now, might need further configuration.
+          }
+        );
+      } else {
+        return new Response("Static content binding missing", { status: 500 });
+      }
+    } catch (e) {
+      // Fallback to a custom 404 page or simple 404
+      const pathname = url.pathname;
+      return new Response(`"${pathname}" not found`, {
+        status: 404,
+        statusText: "Not Found",
+      });
+    }
   },
 };
 

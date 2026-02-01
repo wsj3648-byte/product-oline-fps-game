@@ -10,6 +10,13 @@ bindings = [
   { name = "GAME_ROOM", class_name = "GameRoom" }
 ]
 
+[vars]
+# This binding should be automatically provided by Cloudflare Pages
+# when deploying a Pages project with a Worker using the [site] configuration.
+# If you are deploying a standalone Worker, you might need to manually
+# bind a KV Namespace for static content here.
+# __STATIC_CONTENT = "" # Example of how to explicitly bind, if needed
+
 [[migrations]]
 tag = "v1"
 new_sqlite_classes = ["GameRoom"]
