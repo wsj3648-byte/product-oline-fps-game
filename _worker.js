@@ -24,7 +24,7 @@ export default {
           },
           {
             ASSET_NAMESPACE: env.__STATIC_CONTENT,
-            ASSET_MANIFEST: {}, // In local development, ASSET_MANIFEST is optional
+            ASSET_MANIFEST: env.__STATIC_CONTENT_MANIFEST, // In local development, ASSET_MANIFEST is optional
                                  // For Pages, this is typically generated.
                                  // Leaving empty for now, might need further configuration.
           }
