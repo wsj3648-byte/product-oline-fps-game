@@ -16,22 +16,18 @@ export default {
 
     // Serve static files
     try {
-      if (env.__STATIC_CONTENT) { // Check if STATIC_CONTENT binding exists
-        return await getAssetFromKV(
-          {
-            request,
-            waitUntil: ctx.waitUntil,
-          },
-          {
-            ASSET_NAMESPACE: env.__STATIC_CONTENT,
-            ASSET_MANIFEST: JSON.parse(env.__STATIC_CONTENT_MANIFEST), // In local development, ASSET_MANIFEST is optional
-                                 // For Pages, this is typically generated.
-                                 // Leaving empty for now, might need further configuration.
-          }
-        );
-      } else {
-        return new Response("Static content binding missing", { status: 500 });
-      }
+      const options = {
+        ASSET_NAMESPACE: env.__STATIC_CONTENT,
+        ASSET_MANIFEST: env.__STATIC_CONTENT_MANIFEST ? JSON.parse(env.__STATIC_CONTENT_MANIFEST) : null,
+      };
+      const assetRequest = mapRequestToAsset(new Request(request.url, request));
+      return await getAssetFromKV(
+        {
+          request: assetRequest,
+          waitUntil: ctx.waitUntil.bind(ctx),
+        },
+        options
+      );
     } catch (e) {
       // Fallback to a custom 404 page or simple 404
       const pathname = url.pathname;
