@@ -20,7 +20,7 @@ export default {
         ASSET_NAMESPACE: env.__STATIC_CONTENT,
         ASSET_MANIFEST: env.__STATIC_CONTENT_MANIFEST ? JSON.parse(env.__STATIC_CONTENT_MANIFEST) : null,
       };
-      const assetRequest = mapRequestToAsset(new Request(request.url, request));
+      const assetRequest = mapRequestToAsset(request);
       return await getAssetFromKV(
         {
           request: assetRequest,
