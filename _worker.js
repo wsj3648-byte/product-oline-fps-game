@@ -3,11 +3,39 @@ import { getAssetFromKV, mapRequestToAsset } from '@cloudflare/kv-asset-handler'
 // server.js - Cloudflare Worker implementation
 
 export default {
-  async fetch(request, env, ctx) {
-    console.log("Serving test response");
-    return new Response("Hello, world!", {
-      headers: { 'content-type': 'text/plain' },
-    });
+  async fetch(request, env, ctx) { // Add ctx argument
+    const url = new URL(request.url);
+
+    // Handle WebSocket upgrade requests
+    if (url.pathname === "/websocket") {
+      const roomId = "game_room_alpha"; // Fixed room name for now
+      const id = env.GAME_ROOM.idFromName(roomId);
+      const stub = env.GAME_ROOM.get(id);
+      return stub.fetch(request);
+    }
+
+    // Serve static files
+    try {
+      const options = {
+        ASSET_NAMESPACE: env.__STATIC_CONTENT,
+        ASSET_MANIFEST: env.__STATIC_CONTENT_MANIFEST ? JSON.parse(env.__STATIC_CONTENT_MANIFEST) : null,
+      };
+      const assetRequest = mapRequestToAsset(request);
+      return await getAssetFromKV(
+        {
+          request: assetRequest,
+          waitUntil: ctx.waitUntil.bind(ctx),
+        },
+        options
+      );
+    } catch (e) {
+      // Fallback to a custom 404 page or simple 404
+      const pathname = url.pathname;
+      return new Response(`"${pathname}" not found`, {
+        status: 404,
+        statusText: "Not Found",
+      });
+    }
   },
 };
 
