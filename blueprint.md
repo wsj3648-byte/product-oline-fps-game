@@ -14,7 +14,6 @@
 *   씬에 기본 조명 (`AmbientLight`, `DirectionalLight`, `HemisphereLight`) 추가
 *   `game.js`에서 `THREE.BoxGeometry`를 사용하여 플레이어 모델 구현
 *   렌더러 `pixelRatio` 설정, 그림자 맵 해상도 증가로 화질 개선
-*   `favicon.ico` 404 오류 방지 (`index.html` 수정)
 *   `index.html`에 체력 표시 (`healthDisplay`), 스코어보드 (`scoreboard`), 크로스헤어 (`crosshair`) UI 요소 재추가
 *   `style.css`에 재추가된 UI 요소들을 위한 스타일 추가
 *   `game.js`에 FPS 컨트롤 (마우스 시점, 키보드 이동) 구현
@@ -23,22 +22,13 @@
 *   `game.js`에 발사 메커니즘 (총알 시각화, 서버 이벤트 전송) 구현
 *   `game.js`에 체력 및 스코어보드 UI 업데이트 로직 재통합
 *   `game.js`에 모든 게임 로직이 통합된 애니메이션 루프 구현
+*   **파비콘 오류 해결 (`index.html` 수정):** `favicon.svg`를 올바르게 연결하고 `favicon.ico`에 대한 불필요한 요청을 방지하기 위한 개선 작업을 진행합니다. 또한 모바일 장치 지원을 위해 `apple-touch-icon`을 추가했습니다.
 
-## 현재 계획 (Current Plan) - Cloudflare Worker 백엔드 재아키텍처 (옵션 B)
+## 현재 계획 (Current Plan) - 파비콘 및 `index.html` 리소스 로드 오류 해결
 
 *   **1단계: `blueprint.md` 업데이트 (Completed)**
-    *   새로운 아키텍처 변경 계획과 복잡성을 문서화했습니다.
-
-*   **2단계: Cloudflare Worker 백엔드 재구축 (In Progress)**
-    *   기존 `server.js`를 **Cloudflare Worker 환경에 맞게 완전히 재작성**할 것입니다.
-    *   HTTP 요청을 WebSocket으로 업그레이드하는 로직을 구현합니다.
-    *   게임 상태 관리를 위한 Cloudflare **Durable Objects**를 설계하고 구현합니다.
-    *   Socket.IO 프로토콜 대신 **순수 WebSockets**를 사용하여 클라이언트-서버 통신을 처리합니다.
-    *   **주의:** 이는 기존 코드의 거의 모든 부분을 변경해야 하는 **매우 복잡하고 광범위한 작업**입니다.
-
-*   **3단계: 클라이언트(`game.js`) 수정 (Pending)**
-    *   `socket.io-client` 대신 **네이티브 WebSocket 클라이언트**를 사용하여 Cloudflare Worker의 WebSocket 엔드포인트에 연결하도록 수정합니다.
-    *   기존 Socket.IO 이벤트 핸들러를 WebSocket 메시지 핸들링 로직으로 전환합니다.
-
-*   **4단계: 배포 설정 (Pending)**
-    *   Cloudflare Worker 및 Durable Objects 배포를 위한 `wrangler.jsonc` 설정을 확인하고 업데이트합니다.
+    *   현재 작업 내용에 맞춰 `blueprint.md`를 업데이트했습니다.
+*   **2단계: `index.html` 파비콘 링크 수정 (Completed)**
+    *   `index.html`의 파비콘 링크를 수정하여 `favicon.svg`를 명시적으로 연결하고 `apple-touch-icon`을 추가했습니다. `favicon.ico`에 대한 404 오류는 브라우저의 기본 동작으로 인해 발생하며, 현재 환경에서는 `.ico` 파일을 생성할 수 없으므로 이 오류는 무해한 것으로 간주됩니다.
+*   **3단계: `index.html`의 잠재적인 리소스 로드 오류 조사 및 해결 (Pending)**
+    *   ` (index):1 Failed to load resource: the server responded with a status of 404 ()` 오류는 정보가 부족하여 추가적인 조사가 필요합니다. 이 오류가 지속되면 사용자에게 추가 정보를 요청할 것입니다.
