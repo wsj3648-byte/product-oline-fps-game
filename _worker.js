@@ -2,9 +2,55 @@ import { getAssetFromKV, mapRequestToAsset } from '@cloudflare/kv-asset-handler'
 
 // server.js - Cloudflare Worker implementation
 
+const INDEX_HTML_CONTENT = `<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>My first oline game</title>
+		<link rel="icon" href="favicon.svg" type="image/svg+xml" />
+		<link rel="apple-touch-icon" href="favicon.svg" /> <!-- Recommended for iOS devices -->
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<body>
+		<canvas id="c"></canvas>
+		<div id="crosshair"></div>
+		<div id="healthDisplay">Health: 100</div>
+		<div id="scoreboard">
+			<h2>Scoreboard</h2>
+			<table id="scoreboardTable">
+				<thead>
+					<tr>
+						<th>Player ID</th>
+						<th>Kills</th>
+						<th>Deaths</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- Player scores will be inserted here by JavaScript -->
+				</tbody>
+			</table>
+		</div>
+
+		<script src="https://unpkg.com/three@0.128.0/build/three.min.js"></script>
+		<script src="https://unpkg.com/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+		<script src="https://unpkg.com/three@0.128.0/examples/js/geometries/CapsuleGeometry.js"></script>
+		<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+		<script src="game.js"></script>
+	</body>
+</html>`;
+
 export default {
   async fetch(request, env, ctx) { // Add ctx argument
     const url = new URL(request.url);
+
+    // Explicitly serve index.html for root or /index.html path
+    if (url.pathname === "/" || url.pathname === "/index.html") {
+      return new Response(INDEX_HTML_CONTENT, {
+        headers: {
+          "content-type": "text/html;charset=UTF-8",
+        },
+      });
+    }
 
     // Handle WebSocket upgrade requests
     if (url.pathname === "/websocket") {
@@ -38,8 +84,7 @@ export default {
     }
   },
 };
-
-// Durable Object class
+// Durable Object class remains the same
 export class GameRoom {
   constructor(state, env) {
     this.state = state;
